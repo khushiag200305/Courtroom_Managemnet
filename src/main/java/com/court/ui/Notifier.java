@@ -42,8 +42,8 @@ public final class Notifier {
         popup.setAutoFix(true);
         popup.show(stage);
         // centre it near the bottom of the window once its size is known
-        popup.setX(stage.getX() + (stage.getWidth() - box.getWidth()) / 2);
-        popup.setY(stage.getY() + stage.getHeight() - box.getHeight() - 48);
+        popup.setX(stage.getX() + (stage.getWidth() - popup.getWidth()) / 2);
+        popup.setY(stage.getY() + stage.getHeight() - popup.getHeight() - 48);
 
         FadeTransition fadeIn = new FadeTransition(Duration.millis(180), box);
         fadeIn.setFromValue(0);

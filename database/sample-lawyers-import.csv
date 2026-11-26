@@ -1,0 +1,5 @@
+name,username,bar_id,email,phone,password
+Adv. Rohit Garg,lawyer9,PB/5120/2022,rohit.garg@gmail.com,9812300009,
+Adv. Ananya Sood,lawyer10,PB/5233/2022,ananya.sood@gmail.com,9812300010,
+Adv. Karan Mehra,lawyer11,PB/5301/2023,karan.mehra@gmail.com,9812300011,secret123
+Adv. Wrong Row,lawyer12,12345,not-an-email,123,
