@@ -1,0 +1,23 @@
+# Build output
+target/
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+
+# Runtime data created by the app
+logs/
+documents/
+reports/
+backups/
+
+# Local DB password override (never commit)
+db.local.properties
+
+# OS files
+.DS_Store
+Thumbs.db

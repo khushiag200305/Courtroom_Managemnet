@@ -1,0 +1,413 @@
+/* =====================================================================
+   Courtroom Management System - JavaFX theme
+   Colours: navy #1f2a44 (primary), gold #c9a227 (accent), light #f4f6fa (background)
+   ===================================================================== */
+
+.root {
+    -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    -fx-font-size: 13px;
+    -navy: #1f2a44;
+    -navy-light: #2c3b5e;
+    -gold: #c9a227;
+    -bg: #f4f6fa;
+    -text: #1d2433;
+    -muted: #6b7280;
+    -border: #dfe3eb;
+    -danger: #c0392b;
+    -success: #1e8449;
+    -fx-background-color: -bg;
+}
+
+/* ---------------------------------------------------------- Login screen */
+
+.login-root {
+    -fx-background-color: linear-gradient(to bottom right, #1f2a44, #3a4d7a);
+}
+
+.login-card {
+    -fx-background-color: white;
+    -fx-background-radius: 14;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.35), 30, 0, 0, 8);
+}
+
+.login-brand {
+    -fx-background-color: -navy;
+    -fx-background-radius: 14 0 0 14;
+}
+
+.brand-icon {
+    -fx-font-size: 46px;
+    -fx-text-fill: -gold;
+}
+
+.brand-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.brand-subtitle {
+    -fx-font-size: 15px;
+    -fx-text-fill: #c8d0e0;
+}
+
+.brand-footer {
+    -fx-font-size: 12px;
+    -fx-text-fill: #8f9bb6;
+}
+
+.form-title {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -text;
+}
+
+.form-subtitle {
+    -fx-text-fill: -muted;
+}
+
+.field-label {
+    -fx-font-weight: bold;
+    -fx-text-fill: -text;
+}
+
+/* ---------------------------------------------------------- Inputs */
+
+.text-field, .password-field, .text-area, .combo-box, .date-picker {
+    -fx-background-color: white;
+    -fx-background-radius: 6;
+    -fx-border-color: -border;
+    -fx-border-radius: 6;
+    -fx-padding: 8 10 8 10;
+}
+
+.text-area .content {
+    -fx-background-color: white;
+}
+
+.combo-box, .date-picker {
+    -fx-padding: 2 4 2 4;
+}
+
+.text-field:focused, .password-field:focused, .text-area:focused,
+.combo-box:focused, .date-picker:focused {
+    -fx-border-color: -navy;
+    -fx-border-width: 1.5;
+}
+
+/* Added by controllers when validation fails */
+.field-error, .field-error:focused {
+    -fx-border-color: -danger;
+    -fx-border-width: 1.5;
+    -fx-background-color: #fdf2f1;
+}
+
+.error-label {
+    -fx-text-fill: -danger;
+    -fx-background-color: #fdf2f1;
+    -fx-background-radius: 6;
+    -fx-padding: 8 10 8 10;
+}
+
+.success-label {
+    -fx-text-fill: -success;
+    -fx-background-color: #eef8f1;
+    -fx-background-radius: 6;
+    -fx-padding: 8 10 8 10;
+}
+
+.check-box .box {
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+}
+
+/* ---------------------------------------------------------- Buttons */
+
+.button {
+    -fx-cursor: hand;
+    -fx-background-radius: 6;
+    -fx-padding: 8 16 8 16;
+}
+
+.primary-button {
+    -fx-background-color: -navy;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 10 18 10 18;
+}
+
+.primary-button:hover {
+    -fx-background-color: -navy-light;
+}
+
+.primary-button:disabled {
+    -fx-opacity: 0.7;
+}
+
+.secondary-button {
+    -fx-background-color: white;
+    -fx-border-color: -border;
+    -fx-border-radius: 6;
+    -fx-text-fill: -text;
+}
+
+.secondary-button:hover {
+    -fx-background-color: #eef1f6;
+}
+
+.danger-button {
+    -fx-background-color: -danger;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.danger-button:hover {
+    -fx-background-color: #a93226;
+}
+
+.gold-button {
+    -fx-background-color: -gold;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.gold-button:hover {
+    -fx-background-color: #b08d1f;
+}
+
+/* ---------------------------------------------------------- App header */
+
+.app-header {
+    -fx-background-color: -navy;
+}
+
+.header-icon {
+    -fx-font-size: 28px;
+    -fx-text-fill: -gold;
+}
+
+.header-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.header-subtitle {
+    -fx-font-size: 11px;
+    -fx-text-fill: #aab4c8;
+}
+
+.header-user {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.role-badge {
+    -fx-background-color: -gold;
+    -fx-text-fill: white;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-padding: 2 8 2 8;
+    -fx-background-radius: 10;
+}
+
+.logout-button {
+    -fx-background-color: transparent;
+    -fx-border-color: #55648a;
+    -fx-border-radius: 6;
+    -fx-text-fill: white;
+}
+
+.logout-button:hover {
+    -fx-background-color: -navy-light;
+}
+
+/* ---------------------------------------------------------- Sidebar */
+
+.sidebar {
+    -fx-background-color: white;
+    -fx-border-color: transparent -border transparent transparent;
+}
+
+.sidebar-heading {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -muted;
+    -fx-padding: 0 0 6 10;
+}
+
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-alignment: center-left;
+    -fx-text-fill: -text;
+    -fx-font-size: 13.5px;
+    -fx-padding: 10 14 10 14;
+}
+
+.nav-button:hover {
+    -fx-background-color: #eef1f6;
+}
+
+.nav-button.active {
+    -fx-background-color: -navy;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.nav-badge {
+    -fx-background-color: -danger;
+    -fx-text-fill: white;
+    -fx-font-size: 10px;
+    -fx-padding: 1 6 1 6;
+    -fx-background-radius: 8;
+}
+
+/* ---------------------------------------------------------- Content pages */
+
+.content-area, .page {
+    -fx-background-color: -bg;
+}
+
+.page-scroll, .page-scroll > .viewport {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.page-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -text;
+}
+
+.page-subtitle {
+    -fx-text-fill: -muted;
+}
+
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-color: -border;
+    -fx-border-radius: 10;
+    -fx-padding: 18;
+}
+
+.card-title {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -text;
+}
+
+.card-subtitle {
+    -fx-text-fill: -muted;
+    -fx-font-size: 12px;
+}
+
+.stat-card {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-color: transparent transparent transparent -navy;
+    -fx-border-width: 0 0 0 4;
+    -fx-border-radius: 10;
+    -fx-padding: 16 18 16 18;
+    -fx-spacing: 6;
+    -fx-effect: dropshadow(gaussian, rgba(31, 42, 68, 0.08), 12, 0, 0, 2);
+}
+
+.stat-card-gold  { -fx-border-color: transparent transparent transparent -gold; }
+.stat-card-green { -fx-border-color: transparent transparent transparent -success; }
+.stat-card-red   { -fx-border-color: transparent transparent transparent -danger; }
+
+.stat-label {
+    -fx-text-fill: -muted;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.stat-value {
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -text;
+}
+
+.stat-value-small {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -text;
+}
+
+/* ---------------------------------------------------------- Tables and lists */
+
+.table-view, .list-view {
+    -fx-background-color: white;
+    -fx-border-color: -border;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #f0f2f7;
+    -fx-background-radius: 8 8 0 0;
+}
+
+.table-view .column-header, .table-view .filler {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-size: 36px;
+}
+
+.table-view .column-header .label {
+    -fx-font-weight: bold;
+    -fx-text-fill: -muted;
+    -fx-alignment: center-left;
+}
+
+.table-row-cell {
+    -fx-cell-size: 38px;
+    -fx-border-color: transparent transparent #eef0f4 transparent;
+}
+
+.table-row-cell:selected, .list-cell:filled:selected {
+    -fx-background-color: #e3e9f6;
+    -fx-text-fill: -text;
+}
+
+.table-row-cell:selected .text {
+    -fx-fill: -text;
+}
+
+.list-cell {
+    -fx-padding: 10 12 10 12;
+}
+
+/* Status chips used inside table cells */
+.status-chip {
+    -fx-padding: 2 10 2 10;
+    -fx-background-radius: 10;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.status-filed      { -fx-background-color: #e8eefc; -fx-text-fill: #2d4fa3; }
+.status-defective  { -fx-background-color: #fdecea; -fx-text-fill: #b03a2e; }
+.status-registered { -fx-background-color: #eaf6fb; -fx-text-fill: #1b6f93; }
+.status-pending    { -fx-background-color: #fff6e0; -fx-text-fill: #9a6b00; }
+.status-reserved   { -fx-background-color: #f2ebfb; -fx-text-fill: #6c3fa6; }
+.status-disposed   { -fx-background-color: #e9f6ee; -fx-text-fill: #1e7a45; }
+
+/* ---------------------------------------------------------- Dialogs */
+
+.dialog-pane {
+    -fx-background-color: white;
+}
+
+.dialog-pane > .button-bar > .container > .button {
+    -fx-background-color: -navy;
+    -fx-text-fill: white;
+}
+
+.dialog-pane > .button-bar > .container > .button:cancel {
+    -fx-background-color: #e5e7eb;
+    -fx-text-fill: -text;
+}

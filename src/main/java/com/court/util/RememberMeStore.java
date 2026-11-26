@@ -1,0 +1,66 @@
+package com.court.util;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serial;
+import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.logging.Logger;
+
+/**
+ * "Remember my username" on the login screen, implemented with
+ * <b>object serialization</b>: a {@link RememberedLogin} object is written to
+ * {@code ~/.courtroom/remember.ser} and read back on the next start.
+ * Only the username is stored - never the password.
+ */
+public final class RememberMeStore {
+
+    private static final Logger LOG = Logger.getLogger(RememberMeStore.class.getName());
+    private static final Path FILE = Path.of(System.getProperty("user.home"), ".courtroom", "remember.ser");
+
+    /** The object that gets serialized. Records can be Serializable too. */
+    public record RememberedLogin(String username, LocalDateTime savedAt) implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 1L;
+    }
+
+    private RememberMeStore() {
+    }
+
+    public static void save(String username) {
+        try {
+            Files.createDirectories(FILE.getParent());
+            try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(FILE.toFile()))) {
+                out.writeObject(new RememberedLogin(username, LocalDateTime.now()));
+            }
+        } catch (IOException e) {
+            LOG.warning("Could not save remembered login: " + e.getMessage());
+        }
+    }
+
+    public static Optional<RememberedLogin> load() {
+        if (!Files.exists(FILE)) {
+            return Optional.empty();
+        }
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(FILE.toFile()))) {
+            return Optional.of((RememberedLogin) in.readObject());
+        } catch (IOException | ClassNotFoundException | ClassCastException e) {
+            LOG.warning("Ignoring unreadable remember-me file: " + e.getMessage());
+            return Optional.empty();
+        }
+    }
+
+    public static void clear() {
+        try {
+            Files.deleteIfExists(FILE);
+        } catch (IOException e) {
+            LOG.warning("Could not delete remembered login: " + e.getMessage());
+        }
+    }
+}
