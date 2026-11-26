@@ -36,16 +36,16 @@
             <Button fx:id="homeButton" text="Dashboard" styleClass="nav-button" maxWidth="Infinity" onAction="#showHome">
                 <graphic><FontIcon iconLiteral="fth-grid" iconSize="17"/></graphic>
             </Button>
-            <Button text="Today's cause list" styleClass="nav-button" maxWidth="Infinity" onAction="#handleNav">
+            <Button fx:id="causeListButton" text="Today's cause list" styleClass="nav-button" maxWidth="Infinity" onAction="#openCauseList">
                 <graphic><FontIcon iconLiteral="mdi2g-gavel" iconSize="18"/></graphic>
             </Button>
-            <Button text="My cases" styleClass="nav-button" maxWidth="Infinity" onAction="#handleNav">
+            <Button fx:id="casesButton" text="My cases" styleClass="nav-button" maxWidth="Infinity" onAction="#openCases">
                 <graphic><FontIcon iconLiteral="fth-folder" iconSize="17"/></graphic>
             </Button>
-            <Button text="Reserved judgments" styleClass="nav-button" maxWidth="Infinity" onAction="#handleNav">
+            <Button fx:id="reservedButton" text="Reserved judgments" styleClass="nav-button" maxWidth="Infinity" onAction="#openReserved">
                 <graphic><FontIcon iconLiteral="mdi2s-scale-balance" iconSize="18"/></graphic>
             </Button>
-            <Button text="Calendar" styleClass="nav-button" maxWidth="Infinity" onAction="#handleNav">
+            <Button fx:id="calendarButton" text="Calendar" styleClass="nav-button" maxWidth="Infinity" onAction="#openCalendar">
                 <graphic><FontIcon iconLiteral="fth-calendar" iconSize="17"/></graphic>
             </Button>
 

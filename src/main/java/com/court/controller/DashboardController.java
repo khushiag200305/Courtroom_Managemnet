@@ -118,6 +118,12 @@ public abstract class DashboardController {
         }
     }
 
+    /** Shows a screen that was built in code (not FXML) in the centre of the dashboard. */
+    protected void showContent(Node view, Button navButton) {
+        contentArea.getChildren().setAll(view);
+        setActive(navButton);
+    }
+
     /** Highlights the selected sidebar button (lookupAll also finds buttons wrapped in a StackPane). */
     protected void setActive(Button selected) {
         sidebar.lookupAll(".nav-button").forEach(node -> node.getStyleClass().remove("active"));

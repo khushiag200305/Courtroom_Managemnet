@@ -1067,3 +1067,22 @@
     -fx-font-size: 14px;
     -fx-text-fill: -text;
 }
+
+/* Small text button inside table rows ("Record order", "Deliver judgment") */
+.row-action {
+    -fx-background-color: -slate;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 5 10 5 9;
+    -fx-background-radius: 7;
+    -fx-graphic-text-gap: 6;
+}
+
+.row-action .ikonli-font-icon {
+    -fx-icon-color: -copper-light;
+}
+
+.row-action:hover {
+    -fx-background-color: -slate-2;
+}

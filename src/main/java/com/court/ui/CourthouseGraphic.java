@@ -12,7 +12,7 @@ import javafx.scene.shape.Shape;
  * <p>
  * Usable from FXML: {@code <CourthouseGraphic size="300"/>}.
  */
-public class CourthouseGraphic extends Group {
+public final class CourthouseGraphic extends Group {
 
     /** Drawing is designed on a 300 x 120 grid and scaled to {@link #size}. */
     private static final double BASE_WIDTH = 300;

@@ -4,17 +4,27 @@ import com.court.dto.CaseSummary;
 import com.court.dto.DashboardStats;
 import com.court.dto.HearingRow;
 import com.court.model.CaseStatus;
+import com.court.model.CourtCase;
+import com.court.model.Hearing;
 import com.court.model.Lawyer;
 import com.court.model.User;
+import com.court.service.CaseService;
+import com.court.service.HearingService;
+import com.court.ui.HearingCalendarView;
+import com.court.ui.OrdersView;
 import com.court.util.BackgroundTask;
+import com.court.util.SessionManager;
 import com.court.util.UiFactory;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.VBox;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -42,6 +52,14 @@ public class LawyerDashboardController extends DashboardController {
     @FXML private Label emailLabel;
     @FXML private Label phoneLabel;
     @FXML private VBox returnedList;
+    @FXML private Button casesButton;
+    @FXML private Button fileButton;
+    @FXML private Button returnedButton;
+    @FXML private Button hearingsButton;
+    @FXML private Button ordersButton;
+
+    private final CaseService caseService = new CaseService();
+    private final HearingService hearingService = new HearingService();
 
     private record HomeData(DashboardStats.Lawyer stats, List<HearingRow> upcoming, List<CaseSummary> returned) {
     }
@@ -79,6 +97,68 @@ public class LawyerDashboardController extends DashboardController {
                 this::showLoadError);
     }
 
+    // ------------------------------------------------------------------ sidebar
+
+    @FXML
+    private void openCases() {
+        CasesController controller = loadContent("cases.fxml", casesButton);
+        if (controller != null) {
+            controller.init(lawyer(), null, "My cases", "Every case you have filed, from filing to judgment.");
+            controller.setOnCorrect(this::openCorrection);
+            controller.addHeaderButton(UiFactory.button("File a new case", "fth-file-plus", "primary-button",
+                    this::openFileCase));
+        }
+    }
+
+    @FXML
+    private void openFileCase() {
+        FileCaseController controller = loadContent("file_case.fxml", fileButton);
+        if (controller != null) controller.init(lawyer(), null, this::openCases, this::showHome);
+    }
+
+    @FXML
+    private void openReturned() {
+        CasesController controller = loadContent("cases.fxml", returnedButton);
+        if (controller != null) {
+            controller.init(lawyer(), CaseStatus.DEFECTIVE, "Returned filings",
+                    "The Registrar sent these back. Open one, fix the defects and file it again.");
+            controller.setOnCorrect(this::openCorrection);
+        }
+    }
+
+    private void openCorrection(CourtCase courtCase) {
+        FileCaseController controller = loadContent("file_case.fxml", returnedButton);
+        if (controller != null) controller.init(lawyer(), courtCase, this::openCases, this::openReturned);
+    }
+
+    private record CalendarData(List<Hearing> hearings, Map<LocalDate, String> holidays) {
+    }
+
+    @FXML
+    private void openHearings() {
+        LocalDate today = LocalDate.now();
+        int days = 30;
+        BackgroundTask.run(() -> new CalendarData(
+                        hearingService.forLawyer(lawyer().getId(), today, today.plusDays(days)), hearingService.holidays()),
+                data -> showContent(HearingCalendarView.build("Hearings", "Where you need to appear over the next 30 days.",
+                        data.hearings(), today, days, data.holidays(), true), hearingsButton),
+                this::showLoadError);
+    }
+
+    @FXML
+    private void openOrders() {
+        BackgroundTask.run(() -> caseService.ordersForLawyer(lawyer().getId()),
+                orders -> showContent(OrdersView.build("Orders", "Orders passed in your cases, newest first.", orders),
+                        ordersButton),
+                this::showLoadError);
+    }
+
+    private Lawyer lawyer() {
+        return (Lawyer) SessionManager.getCurrentUser();
+    }
+
+    // ------------------------------------------------------------------ home screen
+
     private void show(HomeData data) {
         DashboardStats.Lawyer s = data.stats();
         activeValue.setText(String.valueOf(s.activeCases()));
@@ -108,7 +188,8 @@ public class LawyerDashboardController extends DashboardController {
             String subtitle = "Defect: " + c.note();
             returnedList.getChildren().add(UiFactory.listRow(
                     UiFactory.icon("fth-alert-triangle", 18), c.title() + "  ·  " + c.type().getDisplayName(),
-                    subtitle, UiFactory.chip("Filed " + UiFactory.relativeDays(c.date()), "chip-red")));
+                    subtitle, UiFactory.button("Correct and refile", "fth-edit-2", "row-action",
+                            () -> caseService.findWithParties(c.id()).ifPresent(this::openCorrection))));
         }
     }
 }

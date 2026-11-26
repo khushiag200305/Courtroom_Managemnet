@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<!-- Case filing form (also used to correct a returned filing) -->
+<ScrollPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.court.controller.FileCaseController"
+            fitToWidth="true" hbarPolicy="NEVER" styleClass="page-scroll">
+    <VBox styleClass="page" spacing="18">
+        <padding><Insets top="28" right="32" bottom="32" left="32"/></padding>
+
+        <VBox spacing="3">
+            <Label fx:id="titleLabel" text="File a new case" styleClass="page-title"/>
+            <Label fx:id="subtitleLabel" styleClass="page-subtitle" wrapText="true"
+                   text="The Registrar checks every filing before it gets a case number and a hearing date."/>
+        </VBox>
+
+        <HBox fx:id="defectBanner" styleClass="banner-error" spacing="10" alignment="CENTER_LEFT"
+              visible="false" managed="false">
+            <FontIcon iconLiteral="fth-alert-triangle" iconSize="18"/>
+            <Label fx:id="defectLabel" wrapText="true" HBox.hgrow="ALWAYS"/>
+        </HBox>
+
+        <!-- 1. About the case: a GridPane form -->
+        <VBox styleClass="card">
+            <Label text="1.  About the case" styleClass="card-title"/>
+            <GridPane hgap="16" vgap="12">
+                <columnConstraints>
+                    <ColumnConstraints minWidth="130"/>
+                    <ColumnConstraints hgrow="ALWAYS"/>
+                </columnConstraints>
+                <Label text="Case type" styleClass="field-label" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <ComboBox fx:id="typeBox" prefWidth="260" promptText="Choose a type"
+                          GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                <Label text="Case details" styleClass="field-label" GridPane.rowIndex="1" GridPane.columnIndex="0"
+                       GridPane.valignment="TOP"/>
+                <VBox spacing="4" GridPane.rowIndex="1" GridPane.columnIndex="1">
+                    <TextArea fx:id="descriptionArea" prefRowCount="5" wrapText="true"
+                              promptText="What the case is about and what relief is sought (at least 20 characters)"/>
+                    <Label fx:id="charCount" styleClass="hint-label"/>
+                </VBox>
+
+                <CheckBox fx:id="urgentCheck" text="Needs urgent listing (bail, stay, injunction or custody)"
+                          GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+            </GridPane>
+        </VBox>
+
+        <!-- 2. Parties: cards are added and removed in the controller -->
+        <VBox styleClass="card">
+            <Label text="2.  Parties" styleClass="card-title"/>
+            <HBox spacing="18">
+                <VBox spacing="10" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                    <HBox alignment="CENTER_LEFT">
+                        <Label text="Petitioners" styleClass="section-title"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button text="Add petitioner" styleClass="secondary-button" onAction="#handleAddPetitioner">
+                            <graphic><FontIcon iconLiteral="fth-plus" iconSize="14"/></graphic>
+                        </Button>
+                    </HBox>
+                    <VBox fx:id="petitionerBox" spacing="10"/>
+                </VBox>
+                <VBox spacing="10" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                    <HBox alignment="CENTER_LEFT">
+                        <Label text="Respondents" styleClass="section-title"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button text="Add respondent" styleClass="secondary-button" onAction="#handleAddRespondent">
+                            <graphic><FontIcon iconLiteral="fth-plus" iconSize="14"/></graphic>
+                        </Button>
+                    </HBox>
+                    <VBox fx:id="respondentBox" spacing="10"/>
+                </VBox>
+            </HBox>
+        </VBox>
+
+        <!-- 3. Documents: drag and drop, or choose -->
+        <VBox styleClass="card">
+            <Label text="3.  Documents" styleClass="card-title"/>
+            <VBox fx:id="dropZone" styleClass="drop-zone" alignment="CENTER" spacing="6">
+                <FontIcon iconLiteral="fth-upload-cloud" iconSize="28"/>
+                <Label text="Drag the petition and supporting documents here" styleClass="row-title"/>
+                <Label text="PDF, images, Word or text files. Up to 10 files, 10 MB each." styleClass="hint-label"/>
+                <Button text="Choose files" styleClass="secondary-button" onAction="#handleChooseFiles">
+                    <VBox.margin><Insets top="6"/></VBox.margin>
+                </Button>
+            </VBox>
+            <VBox fx:id="existingBox"/>
+            <VBox fx:id="fileList"/>
+        </VBox>
+
+        <Label fx:id="errorLabel" styleClass="error-label" wrapText="true" maxWidth="Infinity"
+               visible="false" managed="false">
+            <graphic><FontIcon iconLiteral="fth-alert-circle" iconSize="15"/></graphic>
+        </Label>
+
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <Button text="Cancel" styleClass="secondary-button" onAction="#handleCancel"/>
+            <Button fx:id="submitButton" text="Submit filing" styleClass="primary-button" onAction="#handleSubmit">
+                <graphic><FontIcon iconLiteral="fth-send" iconSize="15"/></graphic>
+            </Button>
+        </HBox>
+    </VBox>
+</ScrollPane>

@@ -4,11 +4,16 @@ import com.court.dto.CaseSummary;
 import com.court.dto.DashboardStats;
 import com.court.dto.HearingRow;
 import com.court.model.CaseStatus;
+import com.court.model.Hearing;
 import com.court.model.Judge;
 import com.court.model.User;
+import com.court.service.HearingService;
+import com.court.ui.HearingCalendarView;
 import com.court.util.BackgroundTask;
+import com.court.util.SessionManager;
 import com.court.util.UiFactory;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -40,6 +45,12 @@ public class JudgeDashboardController extends DashboardController {
     @FXML private TableColumn<HearingRow, CaseStatus> statusCol;
     @FXML private VBox weekBars;
     @FXML private VBox reservedList;
+    @FXML private Button causeListButton;
+    @FXML private Button casesButton;
+    @FXML private Button reservedButton;
+    @FXML private Button calendarButton;
+
+    private final HearingService hearingService = new HearingService();
 
     private record HomeData(
             DashboardStats.Judge stats,
@@ -77,6 +88,51 @@ public class JudgeDashboardController extends DashboardController {
                 this::show,
                 this::showLoadError);
     }
+
+    // ------------------------------------------------------------------ sidebar
+
+    @FXML
+    private void openCauseList() {
+        JudgeCauseListController controller = loadContent("judge_cause_list.fxml", causeListButton);
+        if (controller != null) controller.init(judge());
+    }
+
+    @FXML
+    private void openCases() {
+        CasesController controller = loadContent("cases.fxml", casesButton);
+        if (controller != null) {
+            controller.init(judge(), null, "My cases", "Every case assigned to you, with its next date.");
+        }
+    }
+
+    @FXML
+    private void openReserved() {
+        CasesController controller = loadContent("cases.fxml", reservedButton);
+        if (controller != null) {
+            controller.init(judge(), CaseStatus.RESERVED, "Reserved judgments",
+                    "Arguments are complete in these cases. Deliver the judgment when it is ready.");
+        }
+    }
+
+    private record CalendarData(List<Hearing> hearings, Map<LocalDate, String> holidays) {
+    }
+
+    @FXML
+    private void openCalendar() {
+        LocalDate today = LocalDate.now();
+        int days = 21;
+        BackgroundTask.run(() -> new CalendarData(
+                        hearingService.forJudge(judge().getId(), today, today.plusDays(days)), hearingService.holidays()),
+                data -> showContent(HearingCalendarView.build("Calendar", "Your hearings for the next three weeks.",
+                        data.hearings(), today, days, data.holidays(), false), calendarButton),
+                this::showLoadError);
+    }
+
+    private Judge judge() {
+        return (Judge) SessionManager.getCurrentUser();
+    }
+
+    // ------------------------------------------------------------------ home screen
 
     private void show(HomeData data) {
         DashboardStats.Judge s = data.stats();

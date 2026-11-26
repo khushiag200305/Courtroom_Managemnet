@@ -23,7 +23,7 @@ import java.util.function.Supplier;
  * and the lawyer are all free. Sundays, holidays and past days are greyed out in the calendar.
  * Used when registering a case, listing a hearing, moving one, and fixing the next date in an order.
  */
-public class SlotPicker {
+public final class SlotPicker {
 
     /** Who must be free: judge id, courtroom id and lawyer id. */
     public record Participants(int judgeId, int courtroomId, int lawyerId) {
@@ -117,6 +117,11 @@ public class SlotPicker {
             statusLabel.setText(free.size() + " free slot" + (free.size() == 1 ? "" : "s")
                     + " (judge, courtroom and lawyer all available)");
         }
+    }
+
+    /** Date, time and status stacked in one node, for forms that show or hide them together. */
+    public VBox asNode() {
+        return new VBox(6, datePicker, slotBox, statusLabel);
     }
 
     public void addTo(FormDialog form, String dateLabel) {
