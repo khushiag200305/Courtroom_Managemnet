@@ -84,7 +84,7 @@ CREATE TABLE parties (
 );
 
 -- ---------------------------------------------------------------------
--- Hearings: the UNIQUE keys stop double-booking at database level too
+-- Hearings (double-booking is checked in HearingService before insert)
 -- ---------------------------------------------------------------------
 CREATE TABLE hearings (
     id            INT AUTO_INCREMENT PRIMARY KEY,

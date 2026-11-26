@@ -21,6 +21,7 @@ Built as the mini-project for **UCS553 – Enterprise Web Application**.
 | Database | MySQL 8 |
 | Database access | JDBC (MySQL Connector/J) with the DAO pattern |
 | Build tool | Maven |
+| Icons | Ikonli (Feather icon pack) |
 | Logging | java.util.logging |
 
 ## Project structure
@@ -29,13 +30,14 @@ Built as the mini-project for **UCS553 – Enterprise Web Application**.
 src/main/java/com/court/
  ├── Main.java          JavaFX Application (init / start / stop lifecycle)
  ├── Launcher.java      plain main class for running from an IDE
- ├── model/             User (abstract), Registrar, Judge, Lawyer, Courtroom, Role ...
+ ├── model/             User (abstract), Registrar, Judge, Lawyer, Courtroom, CaseStatus, CaseType ...
+ ├── dto/               records that carry dashboard data (HearingRow, CaseSummary ...)
  ├── dao/               GenericDao<T, ID> and DAO interfaces
  │   └── impl/          JDBC implementations
  ├── service/           business logic (AuthService ...)
  ├── controller/        JavaFX controllers for each screen
  ├── exception/         custom exceptions
- └── util/              DBConnection, AppConfig, PasswordUtil, SceneManager ...
+ └── util/              DBConnection, AppConfig, PasswordUtil, SceneManager, UiFactory ...
 src/main/resources/
  ├── view/              FXML screens
  ├── css/style.css      application theme
@@ -72,8 +74,10 @@ database/
 | Role | Username | Password |
 |---|---|---|
 | Registrar | `registrar` | `admin123` |
-| Judge | `judge1`, `judge2`, `judge3` | `judge123` |
-| Lawyer | `lawyer1` … `lawyer4` | `lawyer123` |
+| Judge | `judge1` … `judge4` (one per courtroom) | `judge123` |
+| Lawyer | `lawyer1` … `lawyer8` | `lawyer123` |
+
+The sample data has 44 cases (filed, returned, pending, reserved and decided), about 100 hearings with orders, and hearings listed for **today** in every courtroom. All dates are relative to the day you load `seed.sql`, so the dashboards always have current data. To refresh it, run both SQL scripts again.
 
 ## Logs
 
