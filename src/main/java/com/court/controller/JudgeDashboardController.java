@@ -63,7 +63,7 @@ public class JudgeDashboardController extends DashboardController {
             UiFactory.textColumn(titleCol, row -> (row.urgent() ? "● " : "") + row.title());
             UiFactory.statusColumn(statusCol, HearingRow::status);
             caseNoCol.getStyleClass().add("mono-cell");
-            UiFactory.fitToRows(hearingsTable, 10, "No hearings are listed before you today.");
+            UiFactory.fitToRows(hearingsTable, 20, "No hearings are listed before you today.");
             tableReady = true;
         }
 

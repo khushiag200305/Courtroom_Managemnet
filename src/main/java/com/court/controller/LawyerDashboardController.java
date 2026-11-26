@@ -65,7 +65,7 @@ public class LawyerDashboardController extends DashboardController {
             UiFactory.textColumn(roomCol, HearingRow::roomNo);
             UiFactory.statusColumn(statusCol, HearingRow::status);
             caseNoCol.getStyleClass().add("mono-cell");
-            UiFactory.fitToRows(hearingsTable, 8, "No hearings in the next 30 days.");
+            UiFactory.fitToRows(hearingsTable, 15, "No hearings in the next 30 days.");
             tableReady = true;
         }
 

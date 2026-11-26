@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.court.ui.CourthouseGraphic?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -25,10 +26,10 @@
             <padding><Insets top="22" right="14" bottom="16" left="14"/></padding>
 
             <HBox styleClass="sidebar-brand">
-                <StackPane styleClass="sidebar-logo"><Label text="⚖"/></StackPane>
+                <StackPane styleClass="sidebar-logo"><FontIcon iconLiteral="mdi2s-scale-balance" iconSize="22"/></StackPane>
                 <VBox spacing="1">
                     <Label fx:id="courtNameLabel" styleClass="brand-name" wrapText="true" maxWidth="160"/>
-                    <Label text="Case management" styleClass="brand-sub"/>
+                    <Label text="e-Court system" styleClass="brand-sub"/>
                 </VBox>
             </HBox>
 
@@ -46,7 +47,7 @@
                 </Label>
             </StackPane>
             <Button text="Hearings" styleClass="nav-button" maxWidth="Infinity" onAction="#handleNav">
-                <graphic><FontIcon iconLiteral="fth-calendar" iconSize="17"/></graphic>
+                <graphic><FontIcon iconLiteral="mdi2g-gavel" iconSize="18"/></graphic>
             </Button>
             <Button text="Cause list" styleClass="nav-button" maxWidth="Infinity" onAction="#handleNav">
                 <graphic><FontIcon iconLiteral="fth-list" iconSize="17"/></graphic>
@@ -60,13 +61,19 @@
                 <graphic><FontIcon iconLiteral="fth-briefcase" iconSize="17"/></graphic>
             </Button>
             <Button text="Courtrooms" styleClass="nav-button" maxWidth="Infinity" onAction="#handleNav">
-                <graphic><FontIcon iconLiteral="fth-layers" iconSize="17"/></graphic>
+                <graphic><FontIcon iconLiteral="mdi2b-bank-outline" iconSize="18"/></graphic>
             </Button>
             <Button text="Reports" styleClass="nav-button" maxWidth="Infinity" onAction="#handleNav">
                 <graphic><FontIcon iconLiteral="fth-bar-chart-2" iconSize="17"/></graphic>
             </Button>
 
             <Region VBox.vgrow="ALWAYS"/>
+
+            <!-- Faint courthouse drawing above the user card -->
+            <StackPane styleClass="sidebar-watermark" mouseTransparent="true">
+                <padding><Insets bottom="14"/></padding>
+                <CourthouseGraphic size="180"/>
+            </StackPane>
 
             <HBox styleClass="user-card">
                 <Label fx:id="avatarLabel" styleClass="avatar"/>
@@ -89,12 +96,13 @@
                 <VBox styleClass="page" spacing="20">
                     <padding><Insets top="28" right="32" bottom="32" left="32"/></padding>
 
-                    <HBox alignment="CENTER_LEFT">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
                         <VBox spacing="3">
                             <Label fx:id="welcomeLabel" styleClass="page-title"/>
                             <Label text="Here's what's happening in court today." styleClass="page-subtitle"/>
                         </VBox>
                         <Region HBox.hgrow="ALWAYS"/>
+                        <Label fx:id="sessionLabel" styleClass="session-pill"/>
                         <Label fx:id="dateLabel" styleClass="date-pill">
                             <graphic><FontIcon iconLiteral="fth-calendar" iconSize="14"/></graphic>
                         </Label>
@@ -116,7 +124,7 @@
                                 <Label fx:id="hearingsValue" text="–" styleClass="stat-value"/>
                                 <Label fx:id="hearingsTrend" styleClass="trend"/>
                             </VBox>
-                            <StackPane styleClass="icon-tile,tile-gold"><FontIcon iconLiteral="fth-calendar" iconSize="18"/></StackPane>
+                            <StackPane styleClass="icon-tile,tile-gold"><FontIcon iconLiteral="mdi2g-gavel" iconSize="20"/></StackPane>
                         </HBox>
                         <HBox styleClass="stat-card" HBox.hgrow="ALWAYS" maxWidth="Infinity">
                             <VBox spacing="4" HBox.hgrow="ALWAYS">
@@ -132,7 +140,7 @@
                                 <Label fx:id="disposedValue" text="–" styleClass="stat-value"/>
                                 <Label fx:id="disposedTrend" styleClass="trend"/>
                             </VBox>
-                            <StackPane styleClass="icon-tile,tile-green"><FontIcon iconLiteral="fth-check-circle" iconSize="18"/></StackPane>
+                            <StackPane styleClass="icon-tile,tile-green"><FontIcon iconLiteral="mdi2s-scale-balance" iconSize="20"/></StackPane>
                         </HBox>
                     </HBox>
 
@@ -146,10 +154,10 @@
                             <TableView fx:id="hearingsTable">
                                 <columns>
                                     <TableColumn fx:id="timeCol" text="Time" prefWidth="80" minWidth="70" maxWidth="90"/>
-                                    <TableColumn fx:id="caseNoCol" text="Case no." prefWidth="110" minWidth="100" maxWidth="130"/>
+                                    <TableColumn fx:id="caseNoCol" text="Case no." prefWidth="128" minWidth="122" maxWidth="140"/>
                                     <TableColumn fx:id="titleCol" text="Parties" prefWidth="220" minWidth="160"/>
                                     <TableColumn fx:id="roomCol" text="Room" prefWidth="60" minWidth="55" maxWidth="70"/>
-                                    <TableColumn fx:id="judgeCol" text="Judge" prefWidth="150" minWidth="120"/>
+                                    <TableColumn fx:id="judgeCol" text="Judge" prefWidth="130" minWidth="120"/>
                                     <TableColumn fx:id="statusCol" text="Status" prefWidth="100" minWidth="95" maxWidth="120"/>
                                 </columns>
                             </TableView>

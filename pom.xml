@@ -44,6 +44,12 @@
             <artifactId>ikonli-feather-pack</artifactId>
             <version>${ikonli.version}</version>
         </dependency>
+        <!-- Material Design icons: gavel, scales of justice, court building -->
+        <dependency>
+            <groupId>org.kordamp.ikonli</groupId>
+            <artifactId>ikonli-materialdesign2-pack</artifactId>
+            <version>${ikonli.version}</version>
+        </dependency>
 
         <!-- MySQL JDBC driver -->
         <dependency>

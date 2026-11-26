@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.court.ui.CourthouseGraphic?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
@@ -7,6 +8,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
@@ -16,47 +19,46 @@
 <!-- StackPane centres the login card on the dark background -->
 <StackPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="com.court.controller.LoginController"
-           styleClass="login-root" prefWidth="1100" prefHeight="700">
+           styleClass="login-root" prefWidth="1100" prefHeight="720">
 
-    <HBox styleClass="login-card" maxWidth="920" maxHeight="560">
+    <fx:define>
+        <ToggleGroup fx:id="roleGroup"/>
+    </fx:define>
 
-        <!-- ===================== Left: branding, features and live figures ===================== -->
-        <VBox styleClass="login-brand" prefWidth="410" minWidth="340" spacing="20">
-            <padding><Insets top="44" right="40" bottom="36" left="40"/></padding>
+    <HBox styleClass="login-card" maxWidth="940" maxHeight="590">
 
-            <StackPane styleClass="brand-logo" alignment="CENTER">
-                <Label text="⚖"/>
+        <!-- ===================== Left: the court ===================== -->
+        <VBox styleClass="login-brand" prefWidth="430" minWidth="360" spacing="14">
+            <padding><Insets top="32" right="36" bottom="30" left="36"/></padding>
+
+            <HBox spacing="12" alignment="CENTER_LEFT">
+                <StackPane styleClass="brand-logo">
+                    <FontIcon iconLiteral="mdi2s-scale-balance" iconSize="26"/>
+                </StackPane>
+                <VBox spacing="2">
+                    <Label fx:id="courtNameLabel" styleClass="brand-title" wrapText="true"/>
+                    <Label text="e-Court management system" styleClass="brand-subtitle"/>
+                </VBox>
+            </HBox>
+
+            <StackPane styleClass="courthouse-box">
+                <padding><Insets top="10" bottom="2"/></padding>
+                <CourthouseGraphic size="300"/>
             </StackPane>
 
-            <VBox spacing="6">
-                <Label fx:id="courtNameLabel" styleClass="brand-title" wrapText="true"/>
-                <Label text="Courtroom Management System" styleClass="brand-subtitle"/>
-            </VBox>
+            <Label text="“Justice delayed is justice denied.”" styleClass="motto" maxWidth="Infinity"/>
 
-            <Region styleClass="brand-divider"/>
+            <HBox styleClass="session-row" spacing="8" alignment="CENTER_LEFT">
+                <StackPane fx:id="sessionDot" styleClass="session-dot"/>
+                <Label fx:id="sessionLabel" styleClass="session-text"/>
+            </HBox>
 
-            <VBox spacing="16">
-                <HBox spacing="14" alignment="CENTER_LEFT">
-                    <StackPane styleClass="feature-tile"><FontIcon iconLiteral="fth-file-text" iconSize="16"/></StackPane>
-                    <VBox spacing="2">
-                        <Label text="File and track cases" styleClass="feature-title"/>
-                        <Label text="Online filing, scrutiny and live status" styleClass="feature-text"/>
-                    </VBox>
+            <VBox styleClass="cause-box" spacing="6">
+                <HBox alignment="CENTER_LEFT" spacing="8">
+                    <FontIcon iconLiteral="mdi2g-gavel" iconSize="15"/>
+                    <Label text="Next on today's cause list" styleClass="cause-heading"/>
                 </HBox>
-                <HBox spacing="14" alignment="CENTER_LEFT">
-                    <StackPane styleClass="feature-tile"><FontIcon iconLiteral="fth-calendar" iconSize="16"/></StackPane>
-                    <VBox spacing="2">
-                        <Label text="Clash-free hearing schedules" styleClass="feature-title"/>
-                        <Label text="No judge, room or lawyer double-booked" styleClass="feature-text"/>
-                    </VBox>
-                </HBox>
-                <HBox spacing="14" alignment="CENTER_LEFT">
-                    <StackPane styleClass="feature-tile"><FontIcon iconLiteral="fth-book-open" iconSize="16"/></StackPane>
-                    <VBox spacing="2">
-                        <Label text="Cause lists, orders and judgments" styleClass="feature-title"/>
-                        <Label text="Every hearing recorded in the case history" styleClass="feature-text"/>
-                    </VBox>
-                </HBox>
+                <VBox fx:id="causeListBox" spacing="2"/>
             </VBox>
 
             <Region VBox.vgrow="ALWAYS"/>
@@ -80,17 +82,34 @@
 
         <!-- ===================== Right: sign-in form ===================== -->
         <VBox styleClass="login-form" HBox.hgrow="ALWAYS" spacing="8">
-            <padding><Insets top="48" right="48" bottom="34" left="48"/></padding>
+            <padding><Insets top="40" right="46" bottom="30" left="46"/></padding>
 
             <Label text="Welcome back" styleClass="form-title"/>
-            <Label text="Sign in with your court account to continue." styleClass="form-subtitle" wrapText="true"/>
+            <Label text="Choose your role and sign in with your court account." styleClass="form-subtitle" wrapText="true"/>
+
+            <!-- Role tabs: ToggleButtons in one ToggleGroup, so only one can be selected -->
+            <HBox spacing="8">
+                <VBox.margin><Insets top="16" bottom="4"/></VBox.margin>
+                <ToggleButton fx:id="registrarTab" text="Registrar" toggleGroup="$roleGroup" selected="true"
+                              styleClass="role-tab" maxWidth="Infinity" HBox.hgrow="ALWAYS">
+                    <graphic><FontIcon iconLiteral="mdi2b-bank" iconSize="17"/></graphic>
+                </ToggleButton>
+                <ToggleButton fx:id="judgeTab" text="Judge" toggleGroup="$roleGroup"
+                              styleClass="role-tab" maxWidth="Infinity" HBox.hgrow="ALWAYS">
+                    <graphic><FontIcon iconLiteral="mdi2g-gavel" iconSize="17"/></graphic>
+                </ToggleButton>
+                <ToggleButton fx:id="lawyerTab" text="Lawyer" toggleGroup="$roleGroup"
+                              styleClass="role-tab" maxWidth="Infinity" HBox.hgrow="ALWAYS">
+                    <graphic><FontIcon iconLiteral="fth-briefcase" iconSize="16"/></graphic>
+                </ToggleButton>
+            </HBox>
 
             <Label text="Username" styleClass="field-label">
-                <VBox.margin><Insets top="22"/></VBox.margin>
+                <VBox.margin><Insets top="8"/></VBox.margin>
             </Label>
             <HBox fx:id="usernameGroup" styleClass="input-group">
                 <FontIcon iconLiteral="fth-user" iconSize="16"/>
-                <TextField fx:id="usernameField" promptText="registrar, judge1 or lawyer1" HBox.hgrow="ALWAYS"/>
+                <TextField fx:id="usernameField" HBox.hgrow="ALWAYS"/>
             </HBox>
 
             <Label text="Password" styleClass="field-label">
@@ -104,7 +123,7 @@
 
             <HBox alignment="CENTER_LEFT">
                 <VBox.margin><Insets top="6"/></VBox.margin>
-                <CheckBox fx:id="rememberMeCheck" text="Remember my username"/>
+                <CheckBox fx:id="rememberMeCheck" text="Remember me on this computer"/>
                 <Region HBox.hgrow="ALWAYS"/>
                 <Hyperlink text="Forgot password?" onAction="#handleForgotPassword"/>
             </HBox>
@@ -116,7 +135,7 @@
 
             <Button fx:id="loginButton" text="Sign in" styleClass="primary-button" maxWidth="Infinity"
                     defaultButton="true" onAction="#handleLogin">
-                <VBox.margin><Insets top="12"/></VBox.margin>
+                <VBox.margin><Insets top="10"/></VBox.margin>
             </Button>
 
             <HBox spacing="10" alignment="CENTER">
@@ -131,10 +150,9 @@
                 <graphic><FontIcon iconLiteral="fth-search" iconSize="15"/></graphic>
             </Button>
 
-            <Region VBox.vgrow="ALWAYS" minHeight="12"/>
+            <Region VBox.vgrow="ALWAYS" minHeight="10"/>
 
-            <Label text="Demo accounts:  registrar / admin123   ·   judge1 / judge123   ·   lawyer1 / lawyer123"
-                   styleClass="hint-label" wrapText="true"/>
+            <Label fx:id="demoHint" styleClass="hint-label" wrapText="true"/>
         </VBox>
     </HBox>
 </StackPane>

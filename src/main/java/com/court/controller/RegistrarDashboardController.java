@@ -83,10 +83,10 @@ public class RegistrarDashboardController extends DashboardController {
         UiFactory.textColumn(caseNoCol, HearingRow::caseNumber);
         UiFactory.textColumn(titleCol, row -> (row.urgent() ? "● " : "") + row.title());
         UiFactory.textColumn(roomCol, HearingRow::roomNo);
-        UiFactory.textColumn(judgeCol, HearingRow::judgeName);
+        UiFactory.textColumn(judgeCol, row -> withoutTitle(row.judgeName()));
         UiFactory.statusColumn(statusCol, HearingRow::status);
         caseNoCol.getStyleClass().add("mono-cell");
-        UiFactory.fitToRows(hearingsTable, 8, "No hearings are listed for today.");
+        UiFactory.fitToRows(hearingsTable, 20, "No hearings are listed for today.");
     }
 
     private void show(HomeData data) {

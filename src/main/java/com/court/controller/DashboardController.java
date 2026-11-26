@@ -6,6 +6,7 @@ import com.court.model.User;
 import com.court.service.AuthService;
 import com.court.util.AlertUtil;
 import com.court.util.AppConfig;
+import com.court.util.CourtClock;
 import com.court.util.SceneManager;
 import com.court.util.SessionManager;
 import com.court.util.UiFactory;
@@ -21,6 +22,7 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
@@ -48,6 +50,7 @@ public abstract class DashboardController {
     @FXML protected Label roleLabel;
     @FXML protected Label welcomeLabel;
     @FXML protected Label dateLabel;
+    @FXML protected Label sessionLabel;
     @FXML protected StackPane contentArea;
 
     /** Shared by all dashboards for their read-only figures. */
@@ -64,6 +67,13 @@ public abstract class DashboardController {
         roleLabel.setText(user.getRole().getDisplayName());
         welcomeLabel.setText(greeting() + ", " + firstName(user.getName()));
         dateLabel.setText(LocalDate.now().format(LONG_DATE));
+
+        // "Court in session" badge with a green or grey dot
+        LocalDateTime now = LocalDateTime.now();
+        boolean sitting = CourtClock.isInSession(now);
+        sessionLabel.setText(CourtClock.status(now));
+        sessionLabel.setGraphic(UiFactory.dot(sitting ? "dot-green" : "dot"));
+        sessionLabel.getStyleClass().add(sitting ? "session-live" : "session-closed");
 
         if (!contentArea.getChildren().isEmpty()) {
             homeView = contentArea.getChildren().get(0);
@@ -124,6 +134,11 @@ public abstract class DashboardController {
             SessionManager.logout();
             SceneManager.switchTo("login.fxml", "Login");
         }
+    }
+
+    /** "Justice Anil Mehta" -> "Anil Mehta", for tables whose column is already headed "Judge". */
+    protected static String withoutTitle(String judgeName) {
+        return judgeName == null ? "-" : judgeName.replaceFirst("^Justice\\s+", "");
     }
 
     /** Shows an error dialog for a failed background load. */

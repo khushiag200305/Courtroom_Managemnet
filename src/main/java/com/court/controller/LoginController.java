@@ -3,12 +3,16 @@ package com.court.controller;
 import com.court.dao.DashboardDao;
 import com.court.dao.impl.DashboardDaoImpl;
 import com.court.dto.CaseSummary;
+import com.court.dto.DashboardStats;
+import com.court.dto.HearingRow;
 import com.court.exception.AuthenticationException;
+import com.court.model.Role;
 import com.court.model.User;
 import com.court.service.AuthService;
 import com.court.util.AlertUtil;
 import com.court.util.AppConfig;
 import com.court.util.BackgroundTask;
+import com.court.util.CourtClock;
 import com.court.util.RememberMeStore;
 import com.court.util.SceneManager;
 import com.court.util.SessionManager;
@@ -25,26 +29,50 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
- * Controller for login.fxml: sign-in, remember-me, live court figures and the public case look-up.
+ * Controller for login.fxml: role tabs, sign-in, remember-me, the court status panel
+ * and the public case look-up.
  */
 public class LoginController {
 
     private static final String ERROR_STYLE = "field-error";
     private static final DateTimeFormatter DATE = DateTimeFormatter.ofPattern("EEE, d MMM yyyy");
+    private static final DateTimeFormatter TIME = DateTimeFormatter.ofPattern("hh:mm a");
+
+    /** Sample account shown as a hint for each role (matches database/seed.sql). */
+    private static final Map<Role, String> DEMO_ACCOUNTS = Map.of(
+            Role.REGISTRAR, "registrar / admin123",
+            Role.JUDGE, "judge1 / judge123   (judge1 to judge4)",
+            Role.LAWYER, "lawyer1 / lawyer123   (lawyer1 to lawyer8)");
 
     @FXML private Label courtNameLabel;
+    @FXML private StackPane sessionDot;
+    @FXML private Label sessionLabel;
+    @FXML private VBox causeListBox;
     @FXML private HBox liveStatsBox;
     @FXML private Label pendingStatLabel;
     @FXML private Label hearingsStatLabel;
     @FXML private Label disposedStatLabel;
+    @FXML private ToggleGroup roleGroup;
+    @FXML private ToggleButton registrarTab;
+    @FXML private ToggleButton judgeTab;
+    @FXML private ToggleButton lawyerTab;
     @FXML private HBox usernameGroup;
     @FXML private HBox passwordGroup;
     @FXML private TextField usernameField;
@@ -52,6 +80,7 @@ public class LoginController {
     @FXML private CheckBox rememberMeCheck;
     @FXML private Label errorLabel;
     @FXML private Button loginButton;
+    @FXML private Label demoHint;
 
     private final AuthService authService = new AuthService();
     private final DashboardDao dashboardDao = new DashboardDaoImpl();
@@ -60,10 +89,13 @@ public class LoginController {
     @FXML
     private void initialize() {
         courtNameLabel.setText(AppConfig.get("court.name", "District Court"));
+        setUpRoleTabs();
+        showCourtSession();
 
-        // Deserialize the remembered username, if any
+        // Deserialize the remembered username and role, if any
         RememberMeStore.load().ifPresent(saved -> {
             usernameField.setText(saved.username());
+            selectTab(saved.role());
             rememberMeCheck.setSelected(true);
             Platform.runLater(passwordField::requestFocus);
         });
@@ -72,18 +104,103 @@ public class LoginController {
         usernameField.textProperty().addListener((obs, oldText, newText) -> clearError(usernameGroup));
         passwordField.textProperty().addListener((obs, oldText, newText) -> clearError(passwordGroup));
 
-        loadLiveFigures();
+        loadCourtFigures();
     }
 
-    /** Shows today's court figures on the left panel (quietly skipped if the query fails). */
-    private void loadLiveFigures() {
-        BackgroundTask.run(dashboardDao::registrarStats, stats -> {
-            pendingStatLabel.setText(String.valueOf(stats.pendingCases()));
-            hearingsStatLabel.setText(String.valueOf(stats.hearingsToday()));
-            disposedStatLabel.setText(String.valueOf(stats.disposedLast30Days()));
-            liveStatsBox.setVisible(true);
-            liveStatsBox.setManaged(true);
-        }, error -> { /* the login form still works without the figures */ });
+    // ------------------------------------------------------------------ role tabs
+
+    private void setUpRoleTabs() {
+        registrarTab.setUserData(Role.REGISTRAR);
+        judgeTab.setUserData(Role.JUDGE);
+        lawyerTab.setUserData(Role.LAWYER);
+
+        // A ToggleGroup lets the user click the selected tab off; put it back so one is always chosen
+        roleGroup.selectedToggleProperty().addListener((obs, oldTab, newTab) -> {
+            if (newTab == null) {
+                roleGroup.selectToggle(oldTab);
+            } else {
+                onRoleChanged();
+            }
+        });
+        onRoleChanged();
+    }
+
+    private Role selectedRole() {
+        return (Role) roleGroup.getSelectedToggle().getUserData();
+    }
+
+    private void selectTab(Role role) {
+        if (role == null) return;
+        switch (role) {
+            case REGISTRAR -> roleGroup.selectToggle(registrarTab);
+            case JUDGE -> roleGroup.selectToggle(judgeTab);
+            case LAWYER -> roleGroup.selectToggle(lawyerTab);
+        }
+    }
+
+    private void onRoleChanged() {
+        Role role = selectedRole();
+        usernameField.setPromptText(switch (role) {
+            case REGISTRAR -> "registrar";
+            case JUDGE -> "judge1";
+            case LAWYER -> "lawyer1";
+        });
+        demoHint.setText("Demo " + role.getDisplayName().toLowerCase() + " account:  " + DEMO_ACCOUNTS.get(role));
+        hideError();
+    }
+
+    // ------------------------------------------------------------------ left panel
+
+    private void showCourtSession() {
+        LocalDateTime now = LocalDateTime.now();
+        sessionLabel.setText(CourtClock.status(now));
+        sessionDot.getStyleClass().add(CourtClock.isInSession(now) ? "session-on" : "session-off");
+    }
+
+    private record CourtFigures(DashboardStats.Registrar stats, List<HearingRow> today) {
+    }
+
+    /** Loads today's figures and cause list (quietly skipped if the database cannot be reached). */
+    private void loadCourtFigures() {
+        BackgroundTask.run(
+                () -> new CourtFigures(dashboardDao.registrarStats(), dashboardDao.todaysHearings()),
+                figures -> {
+                    DashboardStats.Registrar stats = figures.stats();
+                    pendingStatLabel.setText(String.valueOf(stats.pendingCases()));
+                    hearingsStatLabel.setText(String.valueOf(stats.hearingsToday()));
+                    disposedStatLabel.setText(String.valueOf(stats.disposedLast30Days()));
+                    liveStatsBox.setVisible(true);
+                    liveStatsBox.setManaged(true);
+                    showNextHearings(figures.today());
+                },
+                error -> showNextHearings(List.of()));
+    }
+
+    private void showNextHearings(List<HearingRow> today) {
+        causeListBox.getChildren().clear();
+        LocalTime now = LocalTime.now();
+        // Streams: keep hearings that have not started yet, take the first three
+        List<HearingRow> next = today.stream()
+                .filter(h -> !h.time().isBefore(now.withSecond(0).withNano(0)))
+                .limit(3)
+                .toList();
+        if (next.isEmpty()) {
+            Label none = new Label(today.isEmpty() ? "No hearings listed for today." : "All of today's hearings have been called.");
+            none.getStyleClass().add("cause-empty");
+            causeListBox.getChildren().add(none);
+            return;
+        }
+        for (HearingRow h : next) {
+            Label left = new Label(h.time().format(TIME).toLowerCase() + "   " + h.caseNumber());
+            left.getStyleClass().add("cause-case");
+            Label right = new Label("Room " + h.roomNo());
+            right.getStyleClass().add("cause-room");
+            Region spacer = new Region();
+            HBox.setHgrow(spacer, Priority.ALWAYS);
+            HBox row = new HBox(left, spacer, right);
+            row.getStyleClass().add("cause-row");
+            causeListBox.getChildren().add(row);
+        }
     }
 
     // ------------------------------------------------------------------ sign in
@@ -123,10 +240,18 @@ public class LoginController {
 
     private void onLoginSuccess(User user) {
         setBusy(false);
-        SessionManager.login(user);
 
+        // The account must match the tab the user picked
+        if (user.getRole() != selectedRole()) {
+            passwordField.clear();
+            showError("This is a " + user.getRole().getDisplayName() + " account. Choose the "
+                    + user.getRole().getDisplayName() + " tab to sign in.");
+            return;
+        }
+
+        SessionManager.login(user);
         if (rememberMeCheck.isSelected()) {
-            RememberMeStore.save(user.getUsername());
+            RememberMeStore.save(user.getUsername(), user.getRole());
         } else {
             RememberMeStore.clear();
         }
