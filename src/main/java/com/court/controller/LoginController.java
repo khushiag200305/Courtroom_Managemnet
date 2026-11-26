@@ -9,6 +9,7 @@ import com.court.exception.AuthenticationException;
 import com.court.model.Role;
 import com.court.model.User;
 import com.court.service.AuthService;
+import com.court.ui.CourthouseGraphic;
 import com.court.util.AlertUtil;
 import com.court.util.AppConfig;
 import com.court.util.BackgroundTask;
@@ -37,6 +38,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -61,6 +63,8 @@ public class LoginController {
             Role.JUDGE, "judge1 / judge123   (judge1 to judge4)",
             Role.LAWYER, "lawyer1 / lawyer123   (lawyer1 to lawyer8)");
 
+    @FXML private StackPane heroPane;
+    @FXML private CourthouseGraphic heroCourthouse;
     @FXML private Label courtNameLabel;
     @FXML private StackPane sessionDot;
     @FXML private Label sessionLabel;
@@ -89,6 +93,7 @@ public class LoginController {
     @FXML
     private void initialize() {
         courtNameLabel.setText(AppConfig.get("court.name", "District Court"));
+        setUpHeroPanel();
         setUpRoleTabs();
         showCourtSession();
 
@@ -105,6 +110,20 @@ public class LoginController {
         passwordField.textProperty().addListener((obs, oldText, newText) -> clearError(passwordGroup));
 
         loadCourtFigures();
+    }
+
+    // ------------------------------------------------------------------ left court panel
+
+    private void setUpHeroPanel() {
+        // Clip the panel so the large watermark does not spill over the form
+        Rectangle clip = new Rectangle();
+        clip.widthProperty().bind(heroPane.widthProperty());
+        clip.heightProperty().bind(heroPane.heightProperty());
+        heroPane.setClip(clip);
+
+        // Listener: keep the courthouse as wide as the panel when the window is resized
+        heroPane.widthProperty().addListener((obs, oldWidth, newWidth) ->
+                heroCourthouse.setSize(Math.min(newWidth.doubleValue() * 0.92, 820)));
     }
 
     // ------------------------------------------------------------------ role tabs

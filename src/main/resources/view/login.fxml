@@ -16,80 +16,76 @@
 <?import javafx.scene.layout.VBox?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<!-- StackPane centres the login card on the dark background -->
-<StackPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="com.court.controller.LoginController"
-           styleClass="login-root" prefWidth="1100" prefHeight="720">
+<!-- Full-window login: court panel on the left, sign-in form on the right -->
+<HBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.court.controller.LoginController"
+      styleClass="login-root" prefWidth="1240" prefHeight="780">
 
     <fx:define>
         <ToggleGroup fx:id="roleGroup"/>
     </fx:define>
 
-    <HBox styleClass="login-card" maxWidth="940" maxHeight="590">
+    <!-- ===================== Left: the court (layers stacked in a StackPane) ===================== -->
+    <StackPane fx:id="heroPane" styleClass="login-hero" HBox.hgrow="ALWAYS" minWidth="440" prefWidth="700">
 
-        <!-- ===================== Left: the court ===================== -->
-        <VBox styleClass="login-brand" prefWidth="430" minWidth="360" spacing="14">
-            <padding><Insets top="32" right="36" bottom="30" left="36"/></padding>
+        <!-- Layer 1: large faint scales of justice -->
+        <FontIcon iconLiteral="mdi2s-scale-balance" iconSize="460" styleClass="hero-watermark"
+                  StackPane.alignment="TOP_RIGHT">
+            <StackPane.margin><Insets top="-50" right="-90"/></StackPane.margin>
+        </FontIcon>
+
+        <!-- Layer 2: courthouse along the bottom edge (resized with the window in the controller) -->
+        <CourthouseGraphic fx:id="heroCourthouse" size="620" styleClass="hero-courthouse"
+                           StackPane.alignment="BOTTOM_CENTER"/>
+
+        <!-- Layer 3: text and today's court information -->
+        <VBox styleClass="hero-content" spacing="16" StackPane.alignment="TOP_LEFT" pickOnBounds="false">
+            <padding><Insets top="44" right="48" bottom="40" left="52"/></padding>
 
             <HBox spacing="12" alignment="CENTER_LEFT">
                 <StackPane styleClass="brand-logo">
                     <FontIcon iconLiteral="mdi2s-scale-balance" iconSize="26"/>
                 </StackPane>
                 <VBox spacing="2">
-                    <Label fx:id="courtNameLabel" styleClass="brand-title" wrapText="true"/>
+                    <Label fx:id="courtNameLabel" styleClass="brand-title"/>
                     <Label text="e-Court management system" styleClass="brand-subtitle"/>
                 </VBox>
             </HBox>
 
-            <StackPane styleClass="courthouse-box">
-                <padding><Insets top="10" bottom="2"/></padding>
-                <CourthouseGraphic size="300"/>
-            </StackPane>
+            <Region minHeight="18"/>
 
-            <Label text="“Justice delayed is justice denied.”" styleClass="motto" maxWidth="Infinity"/>
+            <Label text="Justice, on time,&#10;for every citizen." styleClass="hero-tagline" wrapText="true"/>
+            <Label text="File cases, follow hearings and read orders in one place."
+                   styleClass="hero-text" wrapText="true" maxWidth="420"/>
 
             <HBox styleClass="session-row" spacing="8" alignment="CENTER_LEFT">
                 <StackPane fx:id="sessionDot" styleClass="session-dot"/>
                 <Label fx:id="sessionLabel" styleClass="session-text"/>
             </HBox>
 
-            <VBox styleClass="cause-box" spacing="6">
+            <VBox styleClass="cause-box" spacing="6" maxWidth="380">
                 <HBox alignment="CENTER_LEFT" spacing="8">
                     <FontIcon iconLiteral="mdi2g-gavel" iconSize="15"/>
                     <Label text="Next on today's cause list" styleClass="cause-heading"/>
                 </HBox>
                 <VBox fx:id="causeListBox" spacing="2"/>
             </VBox>
-
-            <Region VBox.vgrow="ALWAYS"/>
-
-            <!-- Filled from the database once it loads; hidden if the database is unreachable -->
-            <HBox fx:id="liveStatsBox" spacing="10" visible="false" managed="false">
-                <VBox styleClass="live-stat" HBox.hgrow="ALWAYS" maxWidth="Infinity">
-                    <Label fx:id="pendingStatLabel" styleClass="live-value"/>
-                    <Label text="Pending cases" styleClass="live-label"/>
-                </VBox>
-                <VBox styleClass="live-stat" HBox.hgrow="ALWAYS" maxWidth="Infinity">
-                    <Label fx:id="hearingsStatLabel" styleClass="live-value"/>
-                    <Label text="Hearings today" styleClass="live-label"/>
-                </VBox>
-                <VBox styleClass="live-stat" HBox.hgrow="ALWAYS" maxWidth="Infinity">
-                    <Label fx:id="disposedStatLabel" styleClass="live-value"/>
-                    <Label text="Decided (30 days)" styleClass="live-label"/>
-                </VBox>
-            </HBox>
         </VBox>
+    </StackPane>
 
-        <!-- ===================== Right: sign-in form ===================== -->
-        <VBox styleClass="login-form" HBox.hgrow="ALWAYS" spacing="8">
-            <padding><Insets top="40" right="46" bottom="30" left="46"/></padding>
+    <!-- ===================== Right: sign-in form ===================== -->
+    <VBox styleClass="login-panel" prefWidth="540" minWidth="440" alignment="CENTER">
+        <padding><Insets top="36" right="60" bottom="28" left="60"/></padding>
 
-            <Label text="Welcome back" styleClass="form-title"/>
-            <Label text="Choose your role and sign in with your court account." styleClass="form-subtitle" wrapText="true"/>
+        <Region VBox.vgrow="ALWAYS"/>
+
+        <VBox spacing="8" maxWidth="400">
+            <Label text="Sign in" styleClass="form-title"/>
+            <Label text="Choose your role and use your court account." styleClass="form-subtitle" wrapText="true"/>
 
             <!-- Role tabs: ToggleButtons in one ToggleGroup, so only one can be selected -->
             <HBox spacing="8">
-                <VBox.margin><Insets top="16" bottom="4"/></VBox.margin>
+                <VBox.margin><Insets top="18" bottom="6"/></VBox.margin>
                 <ToggleButton fx:id="registrarTab" text="Registrar" toggleGroup="$roleGroup" selected="true"
                               styleClass="role-tab" maxWidth="Infinity" HBox.hgrow="ALWAYS">
                     <graphic><FontIcon iconLiteral="mdi2b-bank" iconSize="17"/></graphic>
@@ -105,7 +101,7 @@
             </HBox>
 
             <Label text="Username" styleClass="field-label">
-                <VBox.margin><Insets top="8"/></VBox.margin>
+                <VBox.margin><Insets top="6"/></VBox.margin>
             </Label>
             <HBox fx:id="usernameGroup" styleClass="input-group">
                 <FontIcon iconLiteral="fth-user" iconSize="16"/>
@@ -123,7 +119,7 @@
 
             <HBox alignment="CENTER_LEFT">
                 <VBox.margin><Insets top="6"/></VBox.margin>
-                <CheckBox fx:id="rememberMeCheck" text="Remember me on this computer"/>
+                <CheckBox fx:id="rememberMeCheck" text="Remember me"/>
                 <Region HBox.hgrow="ALWAYS"/>
                 <Hyperlink text="Forgot password?" onAction="#handleForgotPassword"/>
             </HBox>
@@ -150,9 +146,27 @@
                 <graphic><FontIcon iconLiteral="fth-search" iconSize="15"/></graphic>
             </Button>
 
-            <Region VBox.vgrow="ALWAYS" minHeight="10"/>
-
-            <Label fx:id="demoHint" styleClass="hint-label" wrapText="true"/>
+            <Label fx:id="demoHint" styleClass="hint-label" wrapText="true">
+                <VBox.margin><Insets top="10"/></VBox.margin>
+            </Label>
         </VBox>
-    </HBox>
-</StackPane>
+
+        <Region VBox.vgrow="ALWAYS"/>
+
+        <!-- Today's figures, filled from the database; hidden if it cannot be reached -->
+        <HBox fx:id="liveStatsBox" styleClass="login-stats" maxWidth="400" visible="false" managed="false">
+            <VBox HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                <Label fx:id="pendingStatLabel" styleClass="login-stat-value"/>
+                <Label text="Pending cases" styleClass="login-stat-label"/>
+            </VBox>
+            <VBox HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                <Label fx:id="hearingsStatLabel" styleClass="login-stat-value"/>
+                <Label text="Hearings today" styleClass="login-stat-label"/>
+            </VBox>
+            <VBox HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                <Label fx:id="disposedStatLabel" styleClass="login-stat-value"/>
+                <Label text="Decided (30 days)" styleClass="login-stat-label"/>
+            </VBox>
+        </HBox>
+    </VBox>
+</HBox>
