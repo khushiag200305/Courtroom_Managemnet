@@ -29,9 +29,9 @@
     <StackPane fx:id="heroPane" styleClass="login-hero" HBox.hgrow="ALWAYS" minWidth="440" prefWidth="700">
 
         <!-- Layer 1: large faint scales of justice -->
-        <FontIcon iconLiteral="mdi2s-scale-balance" iconSize="460" styleClass="hero-watermark"
+        <FontIcon iconLiteral="mdi2s-scale-balance" iconSize="420" styleClass="hero-watermark"
                   StackPane.alignment="TOP_RIGHT">
-            <StackPane.margin><Insets top="-50" right="-90"/></StackPane.margin>
+            <StackPane.margin><Insets top="-70" right="-170"/></StackPane.margin>
         </FontIcon>
 
         <!-- Layer 2: courthouse along the bottom edge (resized with the window in the controller) -->
