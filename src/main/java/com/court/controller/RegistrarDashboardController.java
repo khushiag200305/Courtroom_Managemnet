@@ -6,10 +6,12 @@ import com.court.dto.DashboardStats;
 import com.court.dto.HearingRow;
 import com.court.model.CaseStatus;
 import com.court.model.CaseType;
+import com.court.model.Role;
 import com.court.model.User;
 import com.court.util.BackgroundTask;
 import com.court.util.UiFactory;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -30,6 +32,13 @@ public class RegistrarDashboardController extends DashboardController {
     private static final String[] BAR_STYLES = {"bar-navy", "bar-gold", "bar-purple", "bar-green"};
 
     @FXML private Label scrutinyBadge;
+    @FXML private Button scrutinyButton;
+    @FXML private Button hearingsButton;
+    @FXML private Button causeListButton;
+    @FXML private Button judgesButton;
+    @FXML private Button lawyersButton;
+    @FXML private Button courtroomsButton;
+    @FXML private Button reportsButton;
     @FXML private Label pendingValue;
     @FXML private Label pendingTrend;
     @FXML private Label hearingsValue;
@@ -77,6 +86,47 @@ public class RegistrarDashboardController extends DashboardController {
                 this::show,
                 this::showLoadError);
     }
+
+    // ------------------------------------------------------------------ sidebar
+
+    @FXML
+    private void openScrutiny() {
+        loadContent("scrutiny.fxml", scrutinyButton);
+    }
+
+    @FXML
+    private void openHearings() {
+        loadContent("hearings.fxml", hearingsButton);
+    }
+
+    @FXML
+    private void openCauseList() {
+        loadContent("cause_list.fxml", causeListButton);
+    }
+
+    @FXML
+    private void openJudges() {
+        UsersController controller = loadContent("users.fxml", judgesButton);
+        if (controller != null) controller.init(Role.JUDGE);
+    }
+
+    @FXML
+    private void openLawyers() {
+        UsersController controller = loadContent("users.fxml", lawyersButton);
+        if (controller != null) controller.init(Role.LAWYER);
+    }
+
+    @FXML
+    private void openCourtrooms() {
+        loadContent("courtrooms.fxml", courtroomsButton);
+    }
+
+    @FXML
+    private void openReports() {
+        loadContent("reports.fxml", reportsButton);
+    }
+
+    // ------------------------------------------------------------------ home screen
 
     private void setUpTable() {
         UiFactory.textColumn(timeCol, row -> row.time().format(TIME));

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.court.controller.CauseListController" styleClass="page" spacing="18">
+    <padding><Insets top="28" right="32" bottom="28" left="32"/></padding>
+
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <VBox spacing="3">
+            <Label text="Cause list" styleClass="page-title"/>
+            <Label text="The cases each court will hear on a day. Publish it the evening before." styleClass="page-subtitle"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="Export CSV" styleClass="secondary-button" onAction="#handleExportCsv">
+            <graphic><FontIcon iconLiteral="fth-grid" iconSize="15"/></graphic>
+        </Button>
+        <Button text="Export printable list" styleClass="primary-button" onAction="#handleExportText">
+            <graphic><FontIcon iconLiteral="fth-printer" iconSize="15"/></graphic>
+        </Button>
+    </HBox>
+
+    <VBox styleClass="card" VBox.vgrow="ALWAYS">
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Date" styleClass="field-label"/>
+            <DatePicker fx:id="datePicker" prefWidth="150"/>
+            <Button text="Tomorrow" styleClass="secondary-button" onAction="#handleTomorrow"/>
+            <ComboBox fx:id="roomFilter" prefWidth="180"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="countLabel" styleClass="chip,chip-neutral"/>
+        </HBox>
+        <FlowPane fx:id="roomSummary" hgap="8" vgap="8"/>
+
+        <TableView fx:id="table" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="srCol" text="Sr." prefWidth="50" minWidth="45" maxWidth="60"/>
+                <TableColumn fx:id="roomCol" text="Court" prefWidth="80"/>
+                <TableColumn fx:id="timeCol" text="Time" prefWidth="85"/>
+                <TableColumn fx:id="caseNoCol" text="Case no." prefWidth="125"/>
+                <TableColumn fx:id="titleCol" text="Parties" prefWidth="260"/>
+                <TableColumn fx:id="judgeCol" text="Judge" prefWidth="150"/>
+                <TableColumn fx:id="statusCol" text="Stage" prefWidth="100"/>
+            </columns>
+        </TableView>
+    </VBox>
+</VBox>

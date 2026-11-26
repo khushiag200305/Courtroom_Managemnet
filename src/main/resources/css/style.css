@@ -873,3 +873,197 @@
     -fx-text-fill: -text;
     -fx-font-weight: bold;
 }
+
+/* ===================================================== Screens added in later steps */
+
+.row-button {
+    -fx-background-color: transparent;
+    -fx-padding: 6;
+    -fx-background-radius: 7;
+}
+
+.row-button:hover {
+    -fx-background-color: #eceff3;
+}
+
+.row-button:hover .ikonli-font-icon {
+    -fx-icon-color: -copper-dark;
+}
+
+.dialog-title {
+    -fx-font-family: "Georgia", "Times New Roman", serif;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -text;
+}
+
+.case-number {
+    -fx-font-family: "Menlo", "Consolas", monospace;
+    -fx-font-size: 13px;
+    -fx-text-fill: -copper-dark;
+    -fx-font-weight: bold;
+}
+
+.body-text {
+    -fx-text-fill: #3a4452;
+    -fx-line-spacing: 2;
+}
+
+.section-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -text;
+}
+
+.banner-error {
+    -fx-background-color: #fbf1ef;
+    -fx-border-color: #efcfca;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 12 14 12 14;
+}
+
+.banner-error .ikonli-font-icon {
+    -fx-icon-color: -red;
+}
+
+.banner-error .label {
+    -fx-text-fill: #7d2a24;
+}
+
+/* Toast notifications (ui.Notifier) */
+.toast {
+    -fx-background-color: -slate;
+    -fx-text-fill: white;
+    -fx-background-radius: 22;
+    -fx-padding: 11 18 11 14;
+    -fx-graphic-text-gap: 10;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.28), 18, 0.1, 0, 4);
+}
+
+.toast-success .ikonli-font-icon {
+    -fx-icon-color: #7ee0aa;
+}
+
+.toast-info .ikonli-font-icon {
+    -fx-icon-color: -copper-light;
+}
+
+/* Calendar days the court is closed */
+.date-cell:disabled {
+    -fx-opacity: 0.35;
+}
+
+.holiday-cell {
+    -fx-background-color: #f8e9de;
+}
+
+/* Tabs in the case file window */
+.tab-pane > .tab-header-area > .headers-region > .tab {
+    -fx-background-color: transparent;
+    -fx-padding: 6 14 6 14;
+    -fx-background-radius: 0;
+}
+
+.tab-pane > .tab-header-area > .headers-region > .tab:selected {
+    -fx-border-color: transparent transparent -copper transparent;
+    -fx-border-width: 0 0 2 0;
+}
+
+.tab-pane > .tab-header-area > .headers-region > .tab .tab-label {
+    -fx-text-fill: -muted;
+    -fx-font-weight: bold;
+}
+
+.tab-pane > .tab-header-area > .headers-region > .tab:selected .tab-label {
+    -fx-text-fill: -text;
+}
+
+.tab-pane > .tab-header-area > .tab-header-background {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent -line transparent;
+}
+
+.tab-pane:focused > .tab-header-area > .headers-region > .tab:selected .focus-indicator {
+    -fx-border-color: transparent;
+}
+
+/* Charts */
+.chart-plot-background {
+    -fx-background-color: transparent;
+}
+
+.chart-vertical-grid-lines {
+    -fx-stroke: transparent;
+}
+
+.chart-horizontal-grid-lines {
+    -fx-stroke: #eceff3;
+}
+
+.axis {
+    -fx-tick-label-fill: -muted;
+}
+
+.default-color0.chart-bar, .default-color0.chart-legend-item-symbol.bar-legend-symbol { -fx-bar-fill: -slate; -fx-background-color: -slate; }
+.default-color1.chart-bar, .default-color1.chart-legend-item-symbol.bar-legend-symbol { -fx-bar-fill: -copper; -fx-background-color: -copper; }
+
+.chart-legend {
+    -fx-background-color: transparent;
+}
+
+.default-color0.chart-pie { -fx-pie-color: #5b6b8c; }
+.default-color1.chart-pie { -fx-pie-color: #c87f4a; }
+.default-color2.chart-pie { -fx-pie-color: #2f3e4e; }
+.default-color3.chart-pie { -fx-pie-color: #e0a27a; }
+.default-color4.chart-pie { -fx-pie-color: #2e7d55; }
+.default-color5.chart-pie { -fx-pie-color: #b0413a; }
+
+.chart-pie {
+    -fx-border-color: white;
+    -fx-border-width: 1.5;
+}
+
+/* Form pieces */
+.party-card {
+    -fx-background-color: #f8f9fb;
+    -fx-background-radius: 10;
+    -fx-border-color: -line;
+    -fx-border-radius: 10;
+    -fx-padding: 12;
+}
+
+.drop-zone {
+    -fx-border-color: #c5ccd5;
+    -fx-border-style: segments(6, 4);
+    -fx-border-radius: 10;
+    -fx-background-color: #fafbfc;
+    -fx-background-radius: 10;
+    -fx-padding: 18;
+}
+
+.drop-zone.drag-over {
+    -fx-border-color: -copper;
+    -fx-background-color: #fbf3ed;
+}
+
+.day-card {
+    -fx-background-color: -paper;
+    -fx-background-radius: 12;
+    -fx-border-color: -line;
+    -fx-border-radius: 12;
+    -fx-padding: 14 16 14 16;
+    -fx-spacing: 8;
+}
+
+.day-card.today {
+    -fx-border-color: -copper;
+    -fx-border-width: 1.5;
+}
+
+.day-title {
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-text-fill: -text;
+}

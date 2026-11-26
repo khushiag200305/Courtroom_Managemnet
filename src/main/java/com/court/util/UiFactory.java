@@ -6,11 +6,14 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -101,6 +104,82 @@ public final class UiFactory {
                 setGraphic(empty || status == null ? null : statusChip(status));
             }
         });
+    }
+
+    /** A column whose cells show a coloured chip, e.g. "Active" / "Inactive". */
+    public static <T> void chipColumn(TableColumn<T, String> column, Function<T, String> text,
+                                      Function<T, String> style) {
+        column.setCellValueFactory(cell -> new ReadOnlyStringWrapper(text.apply(cell.getValue())));
+        column.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(String value, boolean empty) {
+                super.updateItem(value, empty);
+                setText(null);
+                T row = getTableRow() == null ? null : getTableRow().getItem();
+                setGraphic(empty || value == null || row == null ? null : chip(value, style.apply(row)));
+            }
+        });
+    }
+
+    /** A column of small icon buttons for each row (edit, delete, ...). */
+    public static <T> void actionColumn(TableColumn<T, Void> column, Function<T, List<Button>> buttons) {
+        column.setSortable(false);
+        column.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                T row = getTableRow() == null ? null : getTableRow().getItem();
+                if (empty || row == null) {
+                    setGraphic(null);
+                    return;
+                }
+                HBox box = new HBox(4);
+                box.setAlignment(Pos.CENTER_LEFT);
+                box.getChildren().addAll(buttons.apply(row));
+                setGraphic(box);
+            }
+        });
+    }
+
+    /** Small icon button with a tooltip, for table rows. */
+    public static Button rowButton(String iconLiteral, String tooltip, Runnable action) {
+        Button button = new Button();
+        button.setGraphic(icon(iconLiteral, 15));
+        button.getStyleClass().add("row-button");
+        button.setTooltip(new Tooltip(tooltip));
+        button.setOnAction(e -> action.run());
+        return button;
+    }
+
+    /** Button with text and icon, e.g. for page headers. */
+    public static Button button(String text, String iconLiteral, String styleClass, Runnable action) {
+        Button button = new Button(text);
+        if (iconLiteral != null) {
+            button.setGraphic(icon(iconLiteral, 15));
+        }
+        button.getStyleClass().add(styleClass);
+        button.setOnAction(e -> action.run());
+        return button;
+    }
+
+    /** Opens a row's details when it is double-clicked. */
+    public static <T> void onDoubleClick(TableView<T> table, java.util.function.Consumer<T> action) {
+        table.setRowFactory(tv -> {
+            TableRow<T> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && !row.isEmpty()) {
+                    action.accept(row.getItem());
+                }
+            });
+            return row;
+        });
+    }
+
+    /** Standard set-up for full-page tables: fills columns, friendly empty message. */
+    public static void pageTable(TableView<?> table, String emptyMessage) {
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
+        table.setPlaceholder(emptyState("fth-inbox", emptyMessage));
+        table.setFixedCellSize(ROW_HEIGHT);
     }
 
     /**

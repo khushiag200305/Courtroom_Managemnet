@@ -1,5 +1,6 @@
 package com.court.util;
 
+import javafx.application.HostServices;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -7,6 +8,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -60,6 +62,20 @@ public final class SceneManager {
             throw new IllegalArgumentException("FXML not found: /view/" + fxml);
         }
         return new FXMLLoader(url);
+    }
+
+    private static HostServices hostServices;
+
+    /** Set once from Main.start(); used to open documents and exported files. */
+    public static void setHostServices(HostServices services) {
+        hostServices = services;
+    }
+
+    /** Opens a file with the computer's default program (PDF viewer, Excel, ...). */
+    public static void openFile(Path file) {
+        if (hostServices != null) {
+            hostServices.showDocument(file.toAbsolutePath().toUri().toString());
+        }
     }
 
     public static String css() {

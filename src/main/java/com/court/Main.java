@@ -44,6 +44,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         SceneManager.init(primaryStage);
+        SceneManager.setHostServices(getHostServices());
 
         if (startupError != null) {
             AlertUtil.error("Database connection failed", startupError);

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<!-- One screen for both Judges and Lawyers; UsersController.init(role) sets it up -->
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.court.controller.UsersController" styleClass="page" spacing="18">
+    <padding><Insets top="28" right="32" bottom="28" left="32"/></padding>
+
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <VBox spacing="3">
+            <Label fx:id="titleLabel" styleClass="page-title"/>
+            <Label fx:id="subtitleLabel" styleClass="page-subtitle"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="importButton" text="Import from CSV" styleClass="secondary-button" onAction="#handleImport">
+            <graphic><FontIcon iconLiteral="fth-upload" iconSize="15"/></graphic>
+        </Button>
+        <Button fx:id="addButton" styleClass="primary-button" onAction="#handleAdd">
+            <graphic><FontIcon iconLiteral="fth-plus" iconSize="15"/></graphic>
+        </Button>
+    </HBox>
+
+    <VBox styleClass="card" VBox.vgrow="ALWAYS">
+        <HBox spacing="12" alignment="CENTER_LEFT">
+            <HBox styleClass="input-group" HBox.hgrow="ALWAYS" maxWidth="420">
+                <FontIcon iconLiteral="fth-search" iconSize="15"/>
+                <TextField fx:id="searchField" promptText="Search by name, username or ID" HBox.hgrow="ALWAYS"/>
+            </HBox>
+            <ComboBox fx:id="statusFilter" prefWidth="150"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="countLabel" styleClass="chip,chip-neutral"/>
+        </HBox>
+
+        <TableView fx:id="table" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="nameCol" text="Name" prefWidth="210"/>
+                <TableColumn fx:id="usernameCol" text="Username" prefWidth="110"/>
+                <TableColumn fx:id="detailCol" prefWidth="190"/>
+                <TableColumn fx:id="extraCol" prefWidth="170"/>
+                <TableColumn fx:id="phoneCol" text="Phone" prefWidth="110"/>
+                <TableColumn fx:id="statusCol" text="Status" prefWidth="90"/>
+                <TableColumn fx:id="actionsCol" text="Actions" prefWidth="150" minWidth="150" maxWidth="160"/>
+            </columns>
+        </TableView>
+    </VBox>
+</VBox>

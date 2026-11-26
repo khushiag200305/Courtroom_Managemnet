@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.court.controller.ReportsController"
+            fitToWidth="true" hbarPolicy="NEVER" styleClass="page-scroll">
+    <VBox styleClass="page" spacing="18">
+        <padding><Insets top="28" right="32" bottom="32" left="32"/></padding>
+
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <VBox spacing="3">
+                <Label text="Reports" styleClass="page-title"/>
+                <Label text="How the court is doing over the last six months." styleClass="page-subtitle"/>
+            </VBox>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Export report (CSV)" styleClass="primary-button" onAction="#handleExport">
+                <graphic><FontIcon iconLiteral="fth-download" iconSize="15"/></graphic>
+            </Button>
+        </HBox>
+
+        <HBox spacing="16">
+            <HBox styleClass="stat-card" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="All cases" styleClass="stat-label"/>
+                    <Label fx:id="totalValue" text="–" styleClass="stat-value"/>
+                    <Label fx:id="totalTrend" styleClass="trend"/>
+                </VBox>
+                <StackPane styleClass="icon-tile,tile-navy"><FontIcon iconLiteral="fth-folder" iconSize="18"/></StackPane>
+            </HBox>
+            <HBox styleClass="stat-card" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="Disposal rate" styleClass="stat-label"/>
+                    <Label fx:id="rateValue" text="–" styleClass="stat-value"/>
+                    <Label text="of registered cases decided" styleClass="trend"/>
+                </VBox>
+                <StackPane styleClass="icon-tile,tile-green"><FontIcon iconLiteral="mdi2s-scale-balance" iconSize="20"/></StackPane>
+            </HBox>
+            <HBox styleClass="stat-card" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="Average time to decide" styleClass="stat-label"/>
+                    <Label fx:id="daysValue" text="–" styleClass="stat-value"/>
+                    <Label text="days from filing to judgment" styleClass="trend"/>
+                </VBox>
+                <StackPane styleClass="icon-tile,tile-gold"><FontIcon iconLiteral="fth-clock" iconSize="18"/></StackPane>
+            </HBox>
+            <HBox styleClass="stat-card" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <Label text="Returned filings" styleClass="stat-label"/>
+                    <Label fx:id="defectiveValue" text="–" styleClass="stat-value"/>
+                    <Label text="waiting for lawyers to correct" styleClass="trend"/>
+                </VBox>
+                <StackPane styleClass="icon-tile,tile-red"><FontIcon iconLiteral="fth-corner-up-left" iconSize="18"/></StackPane>
+            </HBox>
+        </HBox>
+
+        <HBox spacing="16">
+            <VBox styleClass="card" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                <VBox spacing="2">
+                    <Label text="Filed and decided per month" styleClass="card-title"/>
+                    <Label text="Cases filed by lawyers and cases disposed by the court" styleClass="card-subtitle"/>
+                </VBox>
+                <BarChart fx:id="monthChart" animated="false" prefHeight="290" legendSide="TOP">
+                    <xAxis><CategoryAxis side="BOTTOM"/></xAxis>
+                    <yAxis><NumberAxis side="LEFT" minorTickVisible="false" tickUnit="1"/></yAxis>
+                </BarChart>
+            </VBox>
+            <VBox styleClass="card" prefWidth="380" minWidth="340">
+                <VBox spacing="2">
+                    <Label text="Cases by stage" styleClass="card-title"/>
+                    <Label text="Every case in the system" styleClass="card-subtitle"/>
+                </VBox>
+                <PieChart fx:id="statusChart" animated="false" prefHeight="290" labelsVisible="false" legendSide="RIGHT"/>
+            </VBox>
+        </HBox>
+
+        <HBox spacing="16">
+            <VBox styleClass="card" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                <VBox spacing="2">
+                    <Label text="Workload per judge" styleClass="card-title"/>
+                    <Label text="Registered, pending and reserved cases" styleClass="card-subtitle"/>
+                </VBox>
+                <VBox fx:id="judgeBars" spacing="14">
+                    <padding><Insets top="6"/></padding>
+                </VBox>
+            </VBox>
+            <VBox styleClass="card" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                <VBox spacing="2">
+                    <Label text="Recent activity" styleClass="card-title"/>
+                    <Label text="From the audit log" styleClass="card-subtitle"/>
+                </VBox>
+                <ListView fx:id="activityList" prefHeight="230"/>
+            </VBox>
+        </HBox>
+
+        <VBox styleClass="card">
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <VBox spacing="2" HBox.hgrow="ALWAYS">
+                    <Label text="Archive of decided cases" styleClass="card-title"/>
+                    <Label fx:id="backupInfo" styleClass="card-subtitle" wrapText="true"/>
+                </VBox>
+                <Button text="Open a backup" styleClass="secondary-button" onAction="#handleOpenBackup">
+                    <graphic><FontIcon iconLiteral="fth-folder" iconSize="15"/></graphic>
+                </Button>
+                <Button text="Back up now" styleClass="primary-button" onAction="#handleBackup">
+                    <graphic><FontIcon iconLiteral="fth-archive" iconSize="15"/></graphic>
+                </Button>
+            </HBox>
+        </VBox>
+    </VBox>
+</ScrollPane>

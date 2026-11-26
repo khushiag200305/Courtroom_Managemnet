@@ -38,7 +38,7 @@
                 <graphic><FontIcon iconLiteral="fth-grid" iconSize="17"/></graphic>
             </Button>
             <StackPane>
-                <Button text="Scrutiny" styleClass="nav-button" maxWidth="Infinity" onAction="#handleNav">
+                <Button fx:id="scrutinyButton" text="Scrutiny" styleClass="nav-button" maxWidth="Infinity" onAction="#openScrutiny">
                     <graphic><FontIcon iconLiteral="fth-inbox" iconSize="17"/></graphic>
                 </Button>
                 <Label fx:id="scrutinyBadge" styleClass="nav-badge" StackPane.alignment="CENTER_RIGHT"
@@ -46,24 +46,24 @@
                     <StackPane.margin><Insets right="12"/></StackPane.margin>
                 </Label>
             </StackPane>
-            <Button text="Hearings" styleClass="nav-button" maxWidth="Infinity" onAction="#handleNav">
+            <Button fx:id="hearingsButton" text="Hearings" styleClass="nav-button" maxWidth="Infinity" onAction="#openHearings">
                 <graphic><FontIcon iconLiteral="mdi2g-gavel" iconSize="18"/></graphic>
             </Button>
-            <Button text="Cause list" styleClass="nav-button" maxWidth="Infinity" onAction="#handleNav">
+            <Button fx:id="causeListButton" text="Cause list" styleClass="nav-button" maxWidth="Infinity" onAction="#openCauseList">
                 <graphic><FontIcon iconLiteral="fth-list" iconSize="17"/></graphic>
             </Button>
 
             <Label text="Manage" styleClass="sidebar-heading"/>
-            <Button text="Judges" styleClass="nav-button" maxWidth="Infinity" onAction="#handleNav">
+            <Button fx:id="judgesButton" text="Judges" styleClass="nav-button" maxWidth="Infinity" onAction="#openJudges">
                 <graphic><FontIcon iconLiteral="fth-award" iconSize="17"/></graphic>
             </Button>
-            <Button text="Lawyers" styleClass="nav-button" maxWidth="Infinity" onAction="#handleNav">
+            <Button fx:id="lawyersButton" text="Lawyers" styleClass="nav-button" maxWidth="Infinity" onAction="#openLawyers">
                 <graphic><FontIcon iconLiteral="fth-briefcase" iconSize="17"/></graphic>
             </Button>
-            <Button text="Courtrooms" styleClass="nav-button" maxWidth="Infinity" onAction="#handleNav">
+            <Button fx:id="courtroomsButton" text="Courtrooms" styleClass="nav-button" maxWidth="Infinity" onAction="#openCourtrooms">
                 <graphic><FontIcon iconLiteral="mdi2b-bank-outline" iconSize="18"/></graphic>
             </Button>
-            <Button text="Reports" styleClass="nav-button" maxWidth="Infinity" onAction="#handleNav">
+            <Button fx:id="reportsButton" text="Reports" styleClass="nav-button" maxWidth="Infinity" onAction="#openReports">
                 <graphic><FontIcon iconLiteral="fth-bar-chart-2" iconSize="17"/></graphic>
             </Button>
 
