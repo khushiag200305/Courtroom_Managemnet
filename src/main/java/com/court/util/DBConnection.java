@@ -48,6 +48,49 @@ public final class DBConnection {
         }
     }
 
+    /** A piece of database work that runs on a given connection (used with lambdas). */
+    @FunctionalInterface
+    public interface SqlWork<T> {
+        T run(Connection con) throws SQLException;
+    }
+
+    /**
+     * Runs several SQL statements as one <b>transaction</b>: if every statement succeeds the
+     * changes are committed together; if any one fails, all of them are rolled back.
+     *
+     * <pre>
+     * DBConnection.inTransaction(con -&gt; {
+     *     caseDao.register(con, ...);
+     *     hearingDao.insert(con, ...);
+     *     return null;
+     * });
+     * </pre>
+     */
+    public static <T> T inTransaction(SqlWork<T> work) {
+        Connection con = null;
+        try {
+            con = getConnection();
+            con.setAutoCommit(false);
+            T result = work.run(con);
+            con.commit();
+            return result;
+        } catch (SQLException e) {
+            rollbackQuietly(con);
+            LOG.warning("Transaction rolled back: " + e.getMessage());
+            throw new DataAccessException("The change could not be saved, so nothing was changed. "
+                    + "Details: " + e.getMessage(), e);
+        } finally {
+            if (con != null) {
+                try {
+                    con.setAutoCommit(true);
+                    con.close();
+                } catch (SQLException ignored) {
+                    // connection is closed anyway
+                }
+            }
+        }
+    }
+
     /** Rolls back quietly - used inside catch blocks of transactions. */
     public static void rollbackQuietly(Connection con) {
         if (con == null) return;
