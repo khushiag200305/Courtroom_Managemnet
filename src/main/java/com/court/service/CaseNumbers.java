@@ -24,8 +24,10 @@ public final class CaseNumbers {
                 .filter(parts -> parts.length == 3)
                 .mapToInt(parts -> parseOrZero(parts[1]))
                 .max()
-                .orElse(FIRST_SERIAL - 1);
-        return type.getPrefix() + "/" + (max + 1) + "/" + year;
+                .orElse(0);
+        // never go below the first serial, even if only malformed numbers exist
+        int next = Math.max(max + 1, FIRST_SERIAL);
+        return type.getPrefix() + "/" + next + "/" + year;
     }
 
     private static int parseOrZero(String text) {
